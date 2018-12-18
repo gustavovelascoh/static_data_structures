@@ -12,11 +12,12 @@
 
 #include <stdint.h>
 
-#define RB_NO_ERROR     0
-#define RB_ERROR        -1
-#define RB_OVERWRITE    -2
-#define RB_EMPTY        -3
-
+typedef struct
+{
+    uint16_t element_size;
+    uint16_t length;
+    void * buffer;
+} rb_attr_t;
 
 typedef struct
 {
@@ -27,11 +28,11 @@ typedef struct
     uint8_t tail;
 } rb_t;
 
-int8_t rb_reset(rb_t * rb);
-uint8_t rb_full(rb_t * rb);
+void rb_init(rb_t * rb, rb_attr_t * rb_attr);
+static uint8_t rb_full(rb_t * rb);
 uint8_t rb_empty(rb_t * rb);
 int8_t rb_put(rb_t * rb, const void *data);
-int8_t rb_peek(rb_t * rb, void *data);
 int8_t rb_get(rb_t * rb, void *data);
+void rb_flush(rb_t * rb);
 
 #endif /* RB_H_ */

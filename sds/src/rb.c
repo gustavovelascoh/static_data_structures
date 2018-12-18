@@ -3,75 +3,45 @@
  *
  *  Created on: Mar 27, 2017
  *      Author: gustavo
- *
- *     Version: 1.0
  */
 
 #include "rb.h"
 #include "string.h"
 
-int8_t rb_reset(rb_t * rb)
+void rb_init(rb_t * rb, rb_attr_t * rb_attr)
 {
-    int8_t ret = RB_ERROR;
-
-    if(rb){
-        ret = RB_NO_ERROR;
-        rb->head = 0;
-        rb->tail = 0;
-    }
-
-    return ret;
+    rb->head = 0;
+    rb->tail = 0;
+    rb->buffer = rb_attr->buffer;
+    rb->element_size = rb_attr->element_size;
+    rb->length = rb_attr->length;
 }
 
-uint8_t rb_full(rb_t * rb)
+static uint8_t rb_full(rb_t * rb)
 {
-    return ((rb->head + 1) % rb->length) == rb->tail;
+    return ((rb->head - rb->tail) == rb->length) ? 1 : 0;
 }
 
 uint8_t rb_empty(rb_t * rb)
 {
-    return (rb->head == rb->tail);
+    return ((rb->head - rb->tail) == 0U) ? 1 : 0;
 }
 
 int8_t rb_put(rb_t * rb, const void *data)
 {
-    int8_t ret = RB_ERROR;
+    int8_t ret = -1;
     uint16_t offset = 0;
-    uint8_t * buf = (uint8_t *) rb->buffer;
 
-    if(rb){
-        offset = rb->head * rb->element_size;
-        memcpy(&(buf[offset]), data, rb->element_size);
-        rb->head = (rb->head + 1) % rb->length;
-
-        ret = RB_NO_ERROR;
-
-        if (rb->head == rb->tail){
-            rb->tail = (rb->tail + 1) % rb->length;
-            ret = RB_OVERWRITE;
-        }
+    if (!rb_full(rb))
+    {
+        offset = (rb->head & (rb->length - 1)) * rb->element_size;
+        memcpy(&(rb->buffer[offset]), data, rb->element_size);
+        rb->head++;
+        ret = 0;
     }
-
-    return ret;
-}
-
-int8_t rb_peek(rb_t * rb, void *data)
-{
-    int8_t ret = RB_ERROR;
-    uint16_t offset = 0;
-    uint8_t * buf = (uint8_t *) rb->buffer;
-
-    if(rb && data){
-        if (!rb_empty(rb))
-        {
-            ret = RB_NO_ERROR;
-            offset = rb->tail * rb->element_size;
-            memcpy(data, &(buf[offset]), rb->element_size);
-        }
-        else
-        {
-            ret = RB_EMPTY;
-        }
+    else
+    {
+        ret = -1;
     }
 
     return ret;
@@ -79,23 +49,25 @@ int8_t rb_peek(rb_t * rb, void *data)
 
 int8_t rb_get(rb_t * rb, void *data)
 {
-    int8_t ret = RB_ERROR;
+    int err = 0;
     uint16_t offset = 0;
-    uint8_t * buf = (uint8_t *) rb->buffer;
 
-    if(rb && data){
-        if (!rb_empty(rb))
-        {
-            ret = RB_NO_ERROR;
-            offset = rb->tail * rb->element_size;
-            memcpy(data, &(buf[offset]), rb->element_size);
-            rb->tail = (rb->tail + 1) % rb->length;
-        }
-        else
-        {
-            ret = RB_EMPTY;
-        }
+    if (rb_empty(rb) == 0)
+    {
+        offset = (rb->tail & (rb->length - 1)) * rb->element_size;
+        memcpy(data, &(rb->buffer[offset]), rb->element_size);
+        rb->tail++;
+    }
+    else
+    {
+        err = -1;
     }
 
-    return ret;
+    return err;
+}
+
+void rb_flush(rb_t * rb)
+{
+    rb->tail = 0;
+    rb->head = 0;
 }
