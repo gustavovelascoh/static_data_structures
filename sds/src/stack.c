@@ -1,5 +1,6 @@
 #include "stack.h"
 #include "string.h"
+#include <stdio.h>
 
 int16_t stack_init(stack_t * stack, void * array, uint16_t size, uint8_t element_size){
     stack->array = array;
@@ -28,4 +29,17 @@ int16_t stack_pop(stack_t * stack, void * data){
         ret = 0;
     }
     return ret;
+}
+
+void stack_print(stack_t * stack){
+    uint16_t i = 0;
+    printf("----- STACK @ %p -----\n", stack);
+    printf("index: %d\n", stack->index);
+    printf("element_size: %d\n", stack->element_size);
+    printf("\n");
+
+    for (i=stack->size; i>0;--i){
+        printf("%04d\t%p\n", i-1, stack->array+((i-1)*stack->element_size));
+    }
+    printf("-----   END  -----\n");
 }
