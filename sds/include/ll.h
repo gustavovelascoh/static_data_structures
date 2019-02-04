@@ -12,6 +12,8 @@
 #include <stdint.h>
 #include "stack.h"
 
+typedef void (* cb_t)(void *);
+
 typedef struct{
     void * data;
     struct ll_node_t * next;
@@ -33,7 +35,7 @@ void ll_init(ll_t * ll,
              uint8_t element_size);
 
 void ll_push(ll_t * ll, void * data);
-
+void ll_traverse(ll_t * ll, cb_t cb);
 void ll_print(ll_t * ll);
 
 #endif /* LL_H_ */
