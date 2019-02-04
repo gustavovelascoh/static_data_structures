@@ -24,7 +24,7 @@ int16_t stack_push(stack_t * stack, void * data){
 int16_t stack_pop(stack_t * stack, void * data){
     int16_t ret = -1;
     if (stack->index > 0){
-        stack->index--;
+        stack->index--;        
         memcpy(data, stack->array + (stack->index * stack->element_size), stack->element_size);
         ret = 0;
     }
@@ -36,6 +36,7 @@ void stack_print(stack_t * stack){
     printf("----- STACK @ %p -----\n", stack);
     printf("index: %d\n", stack->index);
     printf("element_size: %d\n", stack->element_size);
+    printf("stack array: %p\n", stack->array);
     printf("\n");
 
     for (i=stack->size; i>0;--i){
