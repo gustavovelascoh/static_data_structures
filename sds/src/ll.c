@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
+
+
 void ll_init(ll_t * ll,
              ll_node_t * ll_node_a,
              void * ll_array,
@@ -11,6 +13,7 @@ void ll_init(ll_t * ll,
              uint8_t element_size){
 
     uint16_t i = 0;
+    void * temp_ptr = NULL;
 
     ll->stack = stack;
     ll->first = 0x00;
@@ -21,7 +24,8 @@ void ll_init(ll_t * ll,
     for (i=0; i<size; i++){
         (&ll_node_a[i])->data = ll_array+(i*element_size);
         (&ll_node_a[i])->next = 0x00;
-        stack_push(ll->stack, ll_node_a+(i*sizeof(ll_node_t)));
+        temp_ptr = &(ll->node_arr[i]);
+        stack_push(ll->stack, &temp_ptr);
     }
 
 }
@@ -38,37 +42,62 @@ void ll_push(ll_t * ll, void * data){
         current = current->next;
     }
 
-    printf("prev %p, curr: %p\n",prev, current);
     if (prev == 0x00 && current == 0x00){
-        printf("xx");
-        stack_pop(ll->stack, ll->first);
+        stack_pop(ll->stack, &(ll->first));
+        prev = ll->first;
     }
     else{
-        printf("dd");
-        stack_pop(ll->stack, prev->next);
+        stack_pop(ll->stack, &(prev->next));
+        prev = prev->next;
     }
-    printf("prev %p\n",prev);
     memcpy(prev->data, data, ll->element_size);
+}
+
+void ll_traverse(ll_t * ll, cb_t cb){
+    uint16_t cnt = 0;
+    ll_node_t * current;
+    ll_node_t * prev;
+
+    prev = ll->first;
+    current = ll->first;
+
+    while (current != 0x00){
+        prev = current;
+        current = current->next;
+
+        if (cb){
+            cb(prev->data);
+        }
+
+        cnt++;
+    }
 }
 
 void ll_print(ll_t * ll){
     ll_node_t * current;
     uint16_t size = 0;
+    ll_node_t * prev;
+
+    prev = ll->first;
 
     printf("----- LINKED LIST @ %p -----\n", ll);
     printf("element_size: %d\n", ll->element_size);
     printf("node_arr: %p\n", ll->node_arr);
-    printf("first: %p\n", ll->first);
+    printf("first node: %p\n", ll->first);
     printf("stack:\n");
     stack_print(ll->stack);
 
     current = ll->first;
 
     while (current != 0x00){
+        prev = current;
+        current = current->next;
 
+        printf("node %d: data at %p\n", size, prev->data);
+        size++;
     }
 
-    printf("length: %d\n",size);
+    printf("length: %d\n",size-1);
 
     printf("-----    END     -----\n");
 }

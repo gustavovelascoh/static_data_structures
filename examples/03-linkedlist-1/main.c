@@ -8,6 +8,12 @@ typedef struct {
 
 #define PERSONS_LL_SIZE 16
 
+void print_person(void * person_p){
+    person_t * person = (person_t *) person_p;
+    printf("Name: %s, Age: %d\n", person->name, person->age);
+}
+
+
 int16_t main(){
 
     stack_t persons_ll_s;
@@ -40,26 +46,15 @@ int16_t main(){
     ll_print(&persons_ll);
 
     ll_push(&persons_ll, &person_db[0]);
-    //ll_push(&persons_ll, &person_db[1]);
+    ll_push(&persons_ll, &person_db[1]);
+    ll_push(&persons_ll, &person_db[4]);
+    ll_push(&persons_ll, &person_db[5]);
+    ll_push(&persons_ll, &person_db[8]);
+    ll_push(&persons_ll, &person_db[10]);
 
     ll_print(&persons_ll);
-    // uint8_t i = 0;
-    // uint8_t retval = 0;
-    //
-    // for (i=0;i<18;i++){
-    //     printf("Pushing {%d, %s}\n", person_db[i].age, person_db[i].name);
-    //     if (stack_push(&person_stack, &person_db[i]) < 0){
-    //         printf("STACK OVERFLOW\n");
-    //     }
-    // }
-    //
-    // for (i=0;i<18;i++){
-    //     if (stack_pop(&person_stack, &person_db[i]) < 0){
-    //         printf("STACK EMPTY\n");
-    //     } else {
-    //         printf("{%d, %s}\n", person_db[i].age, person_db[i].name);
-    //     }
-    // }
-    //
+
+    ll_traverse(&persons_ll, print_person);
+
     return 0;
 }
