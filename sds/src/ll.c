@@ -39,7 +39,7 @@ void ll_push(ll_t * ll, void * data){
 
     while (current != 0x00){
         prev = current;
-        current = current->next;
+        current = (ll_node_t *) current->next;
     }
 
     if (prev == 0x00 && current == 0x00){
@@ -48,7 +48,7 @@ void ll_push(ll_t * ll, void * data){
     }
     else{
         stack_pop(ll->stack, &(prev->next));
-        prev = prev->next;
+        prev = (ll_node_t *) prev->next;
     }
     memcpy(prev->data, data, ll->element_size);
 }
@@ -63,7 +63,7 @@ void ll_traverse(ll_t * ll, cb_t cb){
 
     while (current != 0x00){
         prev = current;
-        current = current->next;
+        current = (ll_node_t *) current->next;
 
         if (cb){
             cb(prev->data);
@@ -91,7 +91,7 @@ void ll_print(ll_t * ll){
 
     while (current != 0x00){
         prev = current;
-        current = current->next;
+        current = (ll_node_t *) current->next;
 
         printf("node %d: data at %p\n", size, prev->data);
         size++;
