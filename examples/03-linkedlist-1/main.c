@@ -18,7 +18,7 @@ int16_t main(){
 
     stack_t persons_ll_s;
     person_t persons_ll_a[PERSONS_LL_SIZE];
-    person_t * persons_ll_sa[PERSONS_LL_SIZE];
+    ll_node_t * persons_ll_sa[PERSONS_LL_SIZE];
     ll_node_t persons_ll_na[PERSONS_LL_SIZE];
     ll_t persons_ll;
 
@@ -41,7 +41,8 @@ int16_t main(){
         {22, "Alex"}
     };
 
-    ll_init(&persons_ll, persons_ll_na, &persons_ll_a, &persons_ll_s, &persons_ll_sa, PERSONS_LL_SIZE, sizeof(person_t));
+    ll_init(&persons_ll, persons_ll_na, &persons_ll_a, &persons_ll_s,
+        persons_ll_sa, PERSONS_LL_SIZE, sizeof(person_t));
 
     ll_print(&persons_ll);
 

@@ -8,7 +8,7 @@ void ll_init(ll_t * ll,
              ll_node_t * ll_node_a,
              void * ll_array,
              stack_t * stack,
-             void * s_array,
+             ll_node_t * s_array[],
              uint16_t size,
              uint8_t element_size){
 
