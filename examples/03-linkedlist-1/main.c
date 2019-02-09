@@ -13,6 +13,21 @@ void print_person(void * person_p){
     printf("Name: %s, Age: %d\n", person->name, person->age);
 }
 
+void print2(ll_t * pll){
+    ll_node_t * curr;
+    ll_node_t * next;
+    person_t * p;
+
+    ll_get_next(pll, NULL, &next);
+
+    while (next != NULL){
+        p = next->data;
+        printf("Name: %s, Age: %d\n", p->name, p->age);
+        curr = next;
+        ll_get_next(pll, &curr, &next);
+    }
+}
+
 
 int16_t main(){
 
@@ -56,6 +71,8 @@ int16_t main(){
     ll_print(&persons_ll);
 
     ll_traverse(&persons_ll, print_person);
+
+    print2(&persons_ll);
 
     return 0;
 }
