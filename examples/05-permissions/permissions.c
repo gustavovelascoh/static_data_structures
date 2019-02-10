@@ -6,7 +6,7 @@ permission_t permissions_ll_a[PERM_LL_SIZE];
 ll_node_t * permissions_ll_sa[PERM_LL_SIZE];
 ll_node_t permissions_ll_na[PERM_LL_SIZE];
 ll_t permissions_ll;
-char permissions_md5[32];
+uint16_t permissions_crc;
 
 void permissions_init(){
     ll_init(&permissions_ll, permissions_ll_na, &permissions_ll_a,
@@ -22,4 +22,4 @@ void permissions_flush();
 
 uint8_t permissions_validate(tag_t rfid);
 
-void permissions_calc_md5();
+void permissions_calc_crc();

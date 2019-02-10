@@ -28,4 +28,4 @@ void permissions_flush();
 
 uint8_t permissions_validate(tag_t rfid);
 
-void permissions_calc_md5();
+void permissions_calc_crc();
