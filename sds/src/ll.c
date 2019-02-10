@@ -53,6 +53,40 @@ void ll_push(ll_t * ll, void * data){
     memcpy(prev->data, data, ll->element_size);
 }
 
+void ll_get_next(ll_t * ll, ll_node_t ** curr, ll_node_t ** next){
+    //printf("A: curr: %p, next: %p\n", curr, next);
+    if (curr == NULL){
+        *next = ll->first;
+    }else {
+        *next = (ll_node_t *)(* curr)->next;
+    }
+    //printf("B: curr: %p, next: %p\n", curr, next);
+}
+
+void ll_delete_next(ll_t * ll, ll_node_t * curr){
+    ll_node_t * next;
+    ll_node_t * new_next;
+
+    if (curr == NULL){
+        next = ll->first;
+
+    }else {
+        next = curr->next;
+    }
+
+    new_next = next->next;
+    printf("next: %p, new_next: %p\n", next, new_next);
+    if (next != NULL){
+        stack_push(ll->stack, &(next));
+        printf("PUSH'D\n");
+        if (curr == NULL){
+            ll->first = new_next;
+        } else{
+            curr->next = new_next;
+        }
+    }
+}
+
 void ll_traverse(ll_t * ll, cb_t cb){
     uint16_t cnt = 0;
     ll_node_t * current;

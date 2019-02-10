@@ -36,6 +36,7 @@ void ll_init(ll_t * ll,
 
 void ll_push(ll_t * ll, void * data);
 void ll_get_next(ll_t * ll, ll_node_t ** curr, ll_node_t ** next);
+void ll_delete_next(ll_t * ll, ll_node_t * curr);
 void ll_traverse(ll_t * ll, cb_t cb);
 void ll_print(ll_t * ll);
 

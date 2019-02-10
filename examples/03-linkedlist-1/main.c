@@ -28,6 +28,30 @@ void print2(ll_t * pll){
     }
 }
 
+void delete_under(ll_t * pll, uint8_t age){
+    ll_node_t * curr = NULL;
+    ll_node_t * next;
+    person_t * p;
+
+    ll_get_next(pll, NULL, &next);
+
+    while (next != NULL){
+        p = next->data;
+        printf("%s is %d\n", p->name, p->age);
+
+        if (p->age < age){
+            ll_delete_next(pll, curr);
+        } else {
+            curr = next;
+        }
+
+        if (curr == NULL){
+            ll_get_next(pll, NULL, &next);
+        } else {
+            ll_get_next(pll, &curr, &next);
+        }
+    }
+}
 
 int16_t main(){
 
@@ -39,10 +63,10 @@ int16_t main(){
 
     person_t person_db[16] = {
         {12, "John"},
-        {12, "Jenny"},
+        {15, "Jenny"},
         {11, "Dan"},
         {10, "Steve"},
-        {15, "Anne"},
+        {14, "Anne"},
         {19, "Tom"},
         {12, "Joe"},
         {14, "Julie"},
@@ -71,6 +95,12 @@ int16_t main(){
     ll_print(&persons_ll);
 
     ll_traverse(&persons_ll, print_person);
+
+    printf("*****\n");
+
+    delete_under(&persons_ll,15);
+
+    printf("*****\n");
 
     print2(&persons_ll);
 
