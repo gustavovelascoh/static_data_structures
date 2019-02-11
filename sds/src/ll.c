@@ -18,6 +18,7 @@ void ll_init(ll_t * ll,
     ll->stack = stack;
     ll->first = 0x00;
     ll->element_size = element_size;
+    ll->len = 0;
     ll->node_arr = ll_node_a;
     stack_init(ll->stack, s_array, size, sizeof(void *));
 
@@ -50,11 +51,12 @@ void ll_push(ll_t * ll, void * data){
         stack_pop(ll->stack, &(prev->next));
         prev = (ll_node_t *) prev->next;
     }
+    ll->len += 1;
     memcpy(prev->data, data, ll->element_size);
 }
 
-void ll_get_next(ll_t * ll, ll_node_t ** curr, ll_node_t ** next){
-    //printf("A: curr: %p, next: %p\n", curr, next);
+uint8_t ll_get_next(ll_t * ll, ll_node_t ** curr, ll_node_t ** next){
+    printf("Current length: %d\n",ll->len);
     if (curr == NULL){
         *next = ll->first;
     }else {
@@ -84,6 +86,7 @@ void ll_delete_next(ll_t * ll, ll_node_t * curr){
         } else{
             curr->next = new_next;
         }
+        ll->len -= 1;
     }
 }
 
@@ -115,6 +118,7 @@ void ll_print(ll_t * ll){
     prev = ll->first;
 
     printf("----- LINKED LIST @ %p -----\n", ll);
+    printf("length: %d\n", ll->len);
     printf("element_size: %d\n", ll->element_size);
     printf("node_arr: %p\n", ll->node_arr);
     printf("first node: %p\n", ll->first);

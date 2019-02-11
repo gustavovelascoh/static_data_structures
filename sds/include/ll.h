@@ -12,6 +12,10 @@
 #include <stdint.h>
 #include "stack.h"
 
+#define LL_OK       0
+#define LL_EMPTY    1
+#define LL_FULL     2
+
 typedef void (* cb_t)(void *);
 
 typedef struct{
@@ -24,6 +28,7 @@ typedef struct {
     ll_node_t * first;
     ll_node_t * node_arr;
     uint8_t element_size;
+    uint8_t len;
 } ll_t;
 
 void ll_init(ll_t * ll,
@@ -35,7 +40,7 @@ void ll_init(ll_t * ll,
              uint8_t element_size);
 
 void ll_push(ll_t * ll, void * data);
-void ll_get_next(ll_t * ll, ll_node_t ** curr, ll_node_t ** next);
+uint8_t ll_get_next(ll_t * ll, ll_node_t ** curr, ll_node_t ** next);
 void ll_delete_next(ll_t * ll, ll_node_t * curr);
 void ll_traverse(ll_t * ll, cb_t cb);
 void ll_print(ll_t * ll);
