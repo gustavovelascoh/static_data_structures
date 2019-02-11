@@ -19,6 +19,7 @@ void ll_init(ll_t * ll,
     ll->first = 0x00;
     ll->element_size = element_size;
     ll->len = 0;
+    ll->size = size;
     ll->node_arr = ll_node_a;
     stack_init(ll->stack, s_array, size, sizeof(void *));
 
@@ -56,12 +57,26 @@ void ll_push(ll_t * ll, void * data){
 }
 
 uint8_t ll_get_next(ll_t * ll, ll_node_t ** curr, ll_node_t ** next){
+    uint8_t ret = LL_OK;
+
     printf("Current length: %d\n",ll->len);
-    if (curr == NULL){
-        *next = ll->first;
-    }else {
-        *next = (ll_node_t *)(* curr)->next;
+    if (ll->len == 0){
+        ret = LL_EMPTY;
+    } else if (ll->len > ll->size){
+        ret = LL_FULL;
+    } else {
+        if (curr == NULL){
+            *next = ll->first;
+        }else {
+            *next = (ll_node_t *)(* curr)->next;
+
+            if (*next == NULL){
+                ret = LL_END;
+            }
+        }
     }
+
+    return ret;
     //printf("B: curr: %p, next: %p\n", curr, next);
 }
 
@@ -71,7 +86,6 @@ void ll_delete_next(ll_t * ll, ll_node_t * curr){
 
     if (curr == NULL){
         next = ll->first;
-
     }else {
         next = curr->next;
     }

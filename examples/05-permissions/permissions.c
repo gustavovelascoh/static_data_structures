@@ -9,6 +9,8 @@ ll_node_t permissions_ll_na[PERM_LL_SIZE];
 ll_t permissions_ll;
 uint16_t permissions_crc;
 uint8_t permissions_cnt;
+static uint32_t __ids_list[PERM_LL_SIZE];
+static uint8_t __ids_cnt = 0;
 
 void permissions_init(){
     ll_init(&permissions_ll, permissions_ll_na, &permissions_ll_a,
@@ -23,15 +25,32 @@ void permissions_init(){
 void permissions_add(permission_t p){
     ll_node_t * next;
     ll_node_t * curr;
+
+    permission_t * next_perm;
+
     uint8_t ret = 0;
 
     ret = ll_get_next(&permissions_ll, NULL, &next);
 
-    printf("next: %p\n", next);
+    printf("next: %p, ret: %d\n", next, ret);
 
     if (ret == LL_OK){
         //TODO: Insert by ID
-        ;
+        while (ret!=LL_OK){
+            next_perm = next->data;
+
+            if (next_perm->id > p.id){
+                break;
+            }
+
+            curr = next;
+            ret = ll_get_next(&permissions_ll, &curr, &next);
+        }
+
+        if (ret == LL_END){
+
+        }
+
     } else if (ret == LL_EMPTY) {
         ll_push(&permissions_ll, &p);
     } else {
@@ -42,7 +61,9 @@ void permissions_add(permission_t p){
     ll_print(&permissions_ll);
 }
 
-void permissions_remove(uint32_t id);
+void permissions_remove(uint32_t id){
+
+}
 
 void permissions_flush();
 
@@ -52,6 +73,22 @@ void permissions_calc_crc(){
 
 }
 
-void permissions_list_ids(){
+void __fill_ids_list(void * data){
+    permission_t * p = data;
+    __ids_list[__ids_cnt++] = p->id;
+}
+
+void permissions_get_list_ids(uint32_t * ids, uint8_t * len){
+    __ids_cnt = 0;
+    ll_traverse(&permissions_ll, __fill_ids_list);
+    memcpy(&ids, &__ids_list, __ids_cnt*sizeof(uint32_t));
+    *len = __ids_cnt;
+}
+
+void permissions_update_start(){
+    permissions_crc = 0x00;
+}
+
+void permissions_update_end(){
 
 }

@@ -17,4 +17,25 @@ void main(){
 
     permissions_add(p0);
 
+    //return;
+    permissions_add(p1);
+    permissions_add(p2);
+    permissions_add(p3);
+    permissions_add(p4);
+    permissions_add(p5);
+
+
+    permissions_remove(1234);
+    permissions_remove(42);
+    permissions_remove(65535);
+
+    permissions_add(p6);
+    permissions_add(p7);
+    permissions_add(p8);
+    permissions_add(p9);
+
+
+
+
+
 }

@@ -13,8 +13,9 @@
 #include "stack.h"
 
 #define LL_OK       0
-#define LL_EMPTY    1
-#define LL_FULL     2
+#define LL_END       1
+#define LL_EMPTY    2
+#define LL_FULL     3
 
 typedef void (* cb_t)(void *);
 
@@ -28,6 +29,7 @@ typedef struct {
     ll_node_t * first;
     ll_node_t * node_arr;
     uint8_t element_size;
+    uint8_t size;
     uint8_t len;
 } ll_t;
 
