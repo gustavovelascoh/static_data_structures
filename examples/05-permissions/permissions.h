@@ -9,13 +9,9 @@
 #include <stdint.h>
 #include <string.h>
 
-#define LL_OK       0
-#define LL_EMPTY    1
-#define LL_FULL     2
-
 #define PERM_LL_SIZE 10
 
-typedef char tag_t[10];
+typedef char tag_t[11];
 
  typedef struct {
      tag_t rfid;
@@ -36,3 +32,5 @@ uint8_t permissions_validate(tag_t rfid);
 void permissions_calc_crc();
 
 void permissions_get_list_ids(uint32_t * ids, uint8_t * len);
+
+void permisisons_print();

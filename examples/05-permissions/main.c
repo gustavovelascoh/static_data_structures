@@ -1,5 +1,6 @@
 #include "permissions.h"
 
+
 void main(){
 
     permission_t p0 = {"00AA22CC33", 1, 0xF0};
@@ -23,6 +24,8 @@ void main(){
     permissions_add(p3);
     permissions_add(p4);
     permissions_add(p5);
+
+    permisisons_print();
 
 
     permissions_remove(1234);

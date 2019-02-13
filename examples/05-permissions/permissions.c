@@ -24,9 +24,10 @@ void permissions_init(){
 
 void permissions_add(permission_t p){
     ll_node_t * next;
-    ll_node_t * curr;
+    ll_node_t * curr = NULL;
 
     permission_t * next_perm;
+    permission_t * curr_perm;
 
     uint8_t ret = 0;
 
@@ -36,10 +37,18 @@ void permissions_add(permission_t p){
 
     if (ret == LL_OK){
         //TODO: Insert by ID
-        while (ret!=LL_OK){
+        while (ret==LL_OK){
             next_perm = next->data;
-
+            printf("New ID %d, curr id %d\n", p.id, next_perm->id);
             if (next_perm->id > p.id){
+                printf("Inserting ID %d before id %d\n", p.id, next_perm->id);
+                if (curr == NULL){
+                    // TODO: INSERT AT FIRST
+                    ll_insert_next(&permissions_ll, (permissions_ll.first), &p);
+                } else {
+                    //insert after curr:
+                    ll_insert_next(&permissions_ll, curr, &p);
+                }
                 break;
             }
 
@@ -48,7 +57,7 @@ void permissions_add(permission_t p){
         }
 
         if (ret == LL_END){
-
+            ll_insert_next(&permissions_ll, curr, &p);
         }
 
     } else if (ret == LL_EMPTY) {
@@ -58,7 +67,7 @@ void permissions_add(permission_t p){
 
     }
 
-    ll_print(&permissions_ll);
+    //ll_print(&permissions_ll);
 }
 
 void permissions_remove(uint32_t id){
@@ -91,4 +100,19 @@ void permissions_update_start(){
 
 void permissions_update_end(){
 
+}
+
+void permisisons_print(){
+    ll_node_t * curr;
+    ll_node_t * next;
+    permission_t * p;
+
+    ll_get_next(&permissions_ll, NULL, &next);
+
+    while (next != NULL){
+        p = next->data;
+        printf("id: % 8d, RFID: %s, mask: %02X\n", p->id, p->rfid, p->mask);
+        curr = next;
+        ll_get_next(&permissions_ll, &curr, &next);
+    }
 }

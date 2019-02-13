@@ -67,7 +67,7 @@ uint8_t ll_get_next(ll_t * ll, ll_node_t ** curr, ll_node_t ** next){
     } else {
         if (curr == NULL){
             *next = ll->first;
-        }else {
+        } else {
             *next = (ll_node_t *)(* curr)->next;
 
             if (*next == NULL){
@@ -75,9 +75,25 @@ uint8_t ll_get_next(ll_t * ll, ll_node_t ** curr, ll_node_t ** next){
             }
         }
     }
-
     return ret;
     //printf("B: curr: %p, next: %p\n", curr, next);
+}
+
+uint8_t ll_insert_next(ll_t * ll, ll_node_t * curr, void * data){
+    uint8_t ret = LL_OK;
+    ll_node_t * next;
+    ll_node_t * new;
+
+    if (ll->len < ll->size){
+        stack_pop(ll->stack, &new);
+        memcpy(new->data, data, ll->element_size);
+
+        new->next = (struct ll_node_t *) curr->next;
+        curr->next = (struct ll_node_t *) new;
+        ll->len += 1;
+    } else {
+        ret = LL_FULL;
+    }
 }
 
 void ll_delete_next(ll_t * ll, ll_node_t * curr){
@@ -85,20 +101,20 @@ void ll_delete_next(ll_t * ll, ll_node_t * curr){
     ll_node_t * new_next;
 
     if (curr == NULL){
-        next = ll->first;
+        next = (ll_node_t *) ll->first;
     }else {
-        next = curr->next;
+        next = (ll_node_t *) curr->next;
     }
 
-    new_next = next->next;
+    new_next = (ll_node_t *) next->next;
     printf("next: %p, new_next: %p\n", next, new_next);
     if (next != NULL){
         stack_push(ll->stack, &(next));
         printf("PUSH'D\n");
         if (curr == NULL){
-            ll->first = new_next;
+            ll->first = (ll_node_t *) new_next;
         } else{
-            curr->next = new_next;
+            curr->next = (struct ll_node_t *) new_next;
         }
         ll->len -= 1;
     }
