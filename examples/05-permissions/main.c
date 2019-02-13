@@ -32,11 +32,14 @@ void main(){
     permissions_remove(42);
     permissions_remove(65535);
 
+    permisisons_print();
+
     permissions_add(p6);
     permissions_add(p7);
     permissions_add(p8);
     permissions_add(p9);
 
+    permisisons_print();
 
 
 

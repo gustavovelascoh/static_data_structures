@@ -59,7 +59,7 @@ void ll_push(ll_t * ll, void * data){
 uint8_t ll_get_next(ll_t * ll, ll_node_t ** curr, ll_node_t ** next){
     uint8_t ret = LL_OK;
 
-    printf("Current length: %d\n",ll->len);
+    //printf("Current length: %d\n",ll->len);
     if (ll->len == 0){
         ret = LL_EMPTY;
     } else if (ll->len > ll->size){
@@ -107,10 +107,10 @@ void ll_delete_next(ll_t * ll, ll_node_t * curr){
     }
 
     new_next = (ll_node_t *) next->next;
-    printf("next: %p, new_next: %p\n", next, new_next);
+    //printf("next: %p, new_next: %p\n", next, new_next);
     if (next != NULL){
         stack_push(ll->stack, &(next));
-        printf("PUSH'D\n");
+        //printf("PUSH'D\n");
         if (curr == NULL){
             ll->first = (ll_node_t *) new_next;
         } else{

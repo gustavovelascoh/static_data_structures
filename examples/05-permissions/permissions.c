@@ -33,13 +33,12 @@ void permissions_add(permission_t p){
 
     ret = ll_get_next(&permissions_ll, NULL, &next);
 
-    printf("next: %p, ret: %d\n", next, ret);
+    //printf("next: %p, ret: %d\n", next, ret);
 
     if (ret == LL_OK){
-        //TODO: Insert by ID
         while (ret==LL_OK){
             next_perm = next->data;
-            printf("New ID %d, curr id %d\n", p.id, next_perm->id);
+            //printf("New ID %d, curr id %d\n", p.id, next_perm->id);
             if (next_perm->id > p.id){
                 printf("Inserting ID %d before id %d\n", p.id, next_perm->id);
                 if (curr == NULL){
@@ -58,10 +57,12 @@ void permissions_add(permission_t p){
 
         if (ret == LL_END){
             ll_insert_next(&permissions_ll, curr, &p);
+            printf("Inserting ID %d at the end of the list\n", p.id);
         }
 
     } else if (ret == LL_EMPTY) {
         ll_push(&permissions_ll, &p);
+        printf("Inserting ID %d as first element\n", p.id);
     } else {
         // FULL
 
@@ -71,7 +72,42 @@ void permissions_add(permission_t p){
 }
 
 void permissions_remove(uint32_t id){
+    ll_node_t * next;
+    ll_node_t * curr = NULL;
 
+    permission_t * next_perm;
+    permission_t * curr_perm;
+
+    uint8_t ret = 0;
+
+    ret = ll_get_next(&permissions_ll, NULL, &next);
+
+    //printf("next: %p, ret: %d\n", next, ret);
+
+    if (ret == LL_OK){
+        while (ret==LL_OK){
+            next_perm = next->data;
+
+            if (next_perm->id == id){
+                printf("Removing ID %d, found after id %d\n", id, ((permission_t *)(curr->data))->id);
+                ll_delete_next(&permissions_ll, curr);
+                break;
+            }
+
+            curr = next;
+            ret = ll_get_next(&permissions_ll, &curr, &next);
+        }
+
+        if (ret == LL_END){
+            // NOTHING TO REMOVE
+        }
+
+    } else if (ret == LL_EMPTY) {
+        // NOTHING TO REMOVE
+    } else {
+        // FULL
+
+    }
 }
 
 void permissions_flush();
@@ -109,9 +145,11 @@ void permisisons_print(){
 
     ll_get_next(&permissions_ll, NULL, &next);
 
+    printf("\n% 8s\t%10s\t%s\n", "ID", "RFID", "MASK");
+
     while (next != NULL){
         p = next->data;
-        printf("id: % 8d, RFID: %s, mask: %02X\n", p->id, p->rfid, p->mask);
+        printf("% 8d\t%10s\t%02X\n", p->id, p->rfid, p->mask);
         curr = next;
         ll_get_next(&permissions_ll, &curr, &next);
     }
