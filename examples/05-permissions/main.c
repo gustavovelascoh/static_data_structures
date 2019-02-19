@@ -1,7 +1,12 @@
 #include "permissions.h"
+#include <stdio.h>
 
 
 void main(){
+
+    uint32_t list_id[16] = {0};
+    uint8_t list_id_cnt = 0;
+
 
     permission_t p0 = {"00AA22CC33", 1, 0xF0};
     permission_t p1 = {"0025001234", 1234, 0xC0};
@@ -16,6 +21,13 @@ void main(){
 
     permissions_init();
 
+    permissions_get_list_ids(list_id, &list_id_cnt);
+    printf("Current IDS: ");
+    for(uint8_t i=0; i < list_id_cnt; i++){
+        printf("%d, ",list_id[i]);
+    }
+    printf("\n");
+
     permissions_add(p0);
 
     //return;
@@ -27,6 +39,12 @@ void main(){
 
     permisisons_print();
 
+    permissions_get_list_ids(list_id, &list_id_cnt);
+    printf("Current IDS: ");
+    for(uint8_t i=0; i < list_id_cnt; i++){
+        printf("%d, ",list_id[i]);
+    }
+    printf("\n");
 
     permissions_remove(1234);
     permissions_remove(42);
@@ -34,12 +52,26 @@ void main(){
 
     permisisons_print();
 
+    permissions_get_list_ids(list_id, &list_id_cnt);
+    printf("Current IDS: ");
+    for(uint8_t i=0; i < list_id_cnt; i++){
+        printf("%d, ",list_id[i]);
+    }
+    printf("\n");
+
     permissions_add(p6);
     permissions_add(p7);
     permissions_add(p8);
     permissions_add(p9);
 
     permisisons_print();
+
+    permissions_get_list_ids(list_id, &list_id_cnt);
+    printf("Current IDS: ");
+    for(uint8_t i=0; i < list_id_cnt; i++){
+        printf("%d, ",list_id[i]);
+    }
+    printf("\n");
 
 
 

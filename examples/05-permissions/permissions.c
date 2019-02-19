@@ -126,7 +126,7 @@ void __fill_ids_list(void * data){
 void permissions_get_list_ids(uint32_t * ids, uint8_t * len){
     __ids_cnt = 0;
     ll_traverse(&permissions_ll, __fill_ids_list);
-    memcpy(&ids, &__ids_list, __ids_cnt*sizeof(uint32_t));
+    memcpy(ids, __ids_list, __ids_cnt*sizeof(uint32_t));
     *len = __ids_cnt;
 }
 
